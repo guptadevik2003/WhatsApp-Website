@@ -100,4 +100,38 @@ router.post('/uploadtxt', async (req, res) => {
     res.send(`${result}`)
 })
 
+// /api/chat
+router.post('/chat', async (req, res) => {
+
+    // Checking for file
+    if (!req.files) return res.status(400).send(`<title>No File Uploaded</title><h1>No File Was Uploaded.</h1><button onclick="window.open('/read','_self')">Go Back</button>`)
+
+    // Getting file and its name
+    const WAFile = req.files.file
+    WAFileName = WAFile.name
+
+    // Moving file
+    await WAFile.mv(`${process.cwd()}/uploadsReadTemp/${WAFileName}`)
+
+    // Getting file into WhatsApp
+    const chatFile = fs.readFileSync(`${process.cwd()}/uploadsReadTemp/${WAFileName}`, 'utf8')
+
+    // Deleting file
+    try {
+        fs.unlinkSync(`${process.cwd()}/uploadsReadTemp/${WAFileName}`)
+    } catch (err) {
+        console.log(err)
+    }
+
+    // Parsing File
+    const data = await WhatsApp.parseStringSync(chatFile)
+    // Removing System Messages
+    data.forEach(msg => { if (msg.author === 'System') { let index = data.indexOf(msg); if (index > -1) { data.splice(index, 1) } } })
+    // Defining authors
+    let authors = []; data.forEach(msg => { if (authors.includes(msg.author)) return; authors.push(msg.author) })
+
+    // Final Render
+    res.render('chat.ejs', { data: data, authors: authors })
+})
+
 module.exports = router

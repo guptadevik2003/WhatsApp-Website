@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="/styles/chat.css" rel="stylesheet">
+
+</head>
+<body>
+
+    <div class="container clearfix">
+        
+        <div class="chat">
+          <div class="chat-header clearfix">          
+            <div class="chat-about">
+              <div class="chat-with">Chat of <%= authors[0] %> and <%= authors[1] %></div>
+              <div class="chat-num-messages">already <%= data.length %> messages</div>
+            </div>
+            <i class="fa fa-star"></i>
+          </div> <!-- end chat-header -->
+          
+          <div class="chat-history">
+            <ul>
+
+                <% data.forEach(msg => { %>
+
+                    <% if (msg.author === authors[0]) { %>
+
+                        <li class="clearfix">
+                            <div class="message-data align-right">
+                              <span class="message-data-time" ><%= msg.date.toLocaleString() %></span> &nbsp; &nbsp;
+                              <span class="message-data-name" ><%= msg.author %></span> <i class="fa fa-circle me"></i>
+                              
+                            </div>
+                            <div class="message other-message float-right">
+                              <%= msg.message %>
+                            </div>
+                        </li>
+
+                    <% } %>
+
+                    <% if (msg.author === authors[1]) { %>
+
+                        <li>
+                            <div class="message-data">
+                              <span class="message-data-name"><i class="fa fa-circle online"></i> <%= msg.author %></span>
+                              <span class="message-data-time"><%= msg.date.toLocaleString() %></span>
+                            </div>
+                            <div class="message my-message">
+                              <%= msg.message %>
+                            </div>
+                        </li>
+
+                    <% } %>
+
+                <% }) %>
+              
+            </ul>
+            
+          </div> <!-- end chat-history -->
+          
+        </div> <!-- end chat -->
+        
+      </div> <!-- end container -->
+    
+</body>
+</html>

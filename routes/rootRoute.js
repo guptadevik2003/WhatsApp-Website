@@ -17,4 +17,9 @@ router.get('/index', async (req, res) => {
     res.redirect('/')
 })
 
+// /read
+router.get('/read', async (req, res => {
+    res.render('read.ejs')
+}))
+
 module.exports = router
