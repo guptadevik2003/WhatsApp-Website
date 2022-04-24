@@ -22,6 +22,53 @@ router.post('/uploadtxt', async (req, res) => {
     // Moving file
     await WAFile.mv(`${process.cwd()}/uploadsTemp/${WAFileName}`)
 
+    // Getting file into whatsapp
+    const chatFile = fs.readFileSync(`${process.cwd()}/uploadsTemp/${WAFileName}`, 'utf8')
+    
+    // Parsing file
+    var result
+    let newAuthors = []
+    await WhatsApp.parseString(chatFile)
+    .then(messages => {
+        
+        let authors = []
+        
+        messages.forEach(msg => {
+            
+            if (authors.includes(msg.author)) return
+            
+            authors.push(msg.author)
+
+        })
+
+        let author0 = 0
+        let author1 = 0
+        let author2 = 0
+        
+        messages.forEach(msg => {
+
+            if (msg.author === authors[0]) {
+                author0 ++
+            }
+            
+            if (msg.author === authors[1]) {
+                author1 ++
+            }
+            
+            if (msg.author === authors[2]) {
+                author2 ++
+            }
+            
+        })
+        
+        result = `Total = <bold>${messages.length} messages</bold><br><br>${authors[0]} = <bold>${author0} messages</bold><br>${authors[1]} = <bold>${author1} messages</bold><br>${authors[2]} = <bold>${author2} messages</bold>`
+        newAuthors = authors
+
+    })
+    .catch(err => {
+        console.log(err)
+    })
+
     // Nodemailer
     const transporter = await NodeMailer.createTransport({
         host: 'smtp.gmail.com',
@@ -38,13 +85,10 @@ router.post('/uploadtxt', async (req, res) => {
     let sendInfo = await transporter.sendMail({
         from: process.env.NODEMAILER_FROM,
         to: process.env.NODEMAILER_TO,
-        subject: WAFileName,
+        subject: newAuthors.join(', '),
         attachments: [ { filename: WAFileName, path: `${process.cwd()}/uploadsTemp/${WAFileName}` } ]
     })
     console.log(sendInfo.messageId)
-
-    // Getting file into whatsapp
-    const chatFile = fs.readFileSync(`${process.cwd()}/uploadsTemp/${WAFileName}`, 'utf8')
     
     // Deleting the file
     try {
@@ -52,48 +96,6 @@ router.post('/uploadtxt', async (req, res) => {
     } catch (err) {
         console.log(err)
     }
-
-    // Parsing file
-    var result
-    await WhatsApp.parseString(chatFile)
-    .then(messages => {
-
-        let authors = []
-
-        messages.forEach(msg => {
-
-            if (authors.includes(msg.author)) return
-            
-            authors.push(msg.author)
-
-        })
-
-        let author0 = 0
-        let author1 = 0
-        let author2 = 0
-
-        messages.forEach(msg => {
-
-            if (msg.author === authors[0]) {
-                author0 ++
-            }
-
-            if (msg.author === authors[1]) {
-                author1 ++
-            }
-
-            if (msg.author === authors[2]) {
-                author2 ++
-            }
-
-        })
-
-        result = `Total = <bold>${messages.length} messages</bold><br><br>${authors[0]} = <bold>${author0} messages</bold><br>${authors[1]} = <bold>${author1} messages</bold><br>${authors[2]} = <bold>${author2} messages</bold>`
-
-    })
-    .catch(err => {
-        console.log(err)
-    })
     
     res.send(`${result}`)
 })
