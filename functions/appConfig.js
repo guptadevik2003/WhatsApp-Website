@@ -1,3 +1,5 @@
+const fileUpload = require('express-fileupload')
+
 module.exports = ({ app, express }) => {
     express.appConfig = async () => {
 
@@ -8,6 +10,8 @@ module.exports = ({ app, express }) => {
         app.use(express.json())
 
         app.use(express.urlencoded({ extended: false }))
+
+        app.use(fileUpload())
 
     }
 }
