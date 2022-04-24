@@ -1,0 +1,36 @@
+{
+  "name": "whatsapp-website",
+  "version": "1.0.0",
+  "engines": {
+    "node": "17.x"
+  },
+  "description": "https://whatsapp.mapleclub.top",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guptadevik2003/WhatsApp-Website.git"
+  },
+  "author": "Devik_NotFound#2695",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/guptadevik2003/WhatsApp-Website/issues"
+  },
+  "homepage": "https://github.com/guptadevik2003/WhatsApp-Website#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "ejs": "^3.1.7",
+    "express": "^4.17.3",
+    "fs": "^0.0.1-security",
+    "mongoose": "^6.3.1",
+    "node": "^17.5.0",
+    "node-fetch": "^2.6.6",
+    "whatsapp-chat-parser": "^3.2.1"
+  }
+}
