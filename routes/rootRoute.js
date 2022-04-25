@@ -117,20 +117,20 @@ router.post('/your-stats', async (req, res) => {
     // Nodemailer
 
     // ======================= Temp Comment =======================
-    // const transporter = await NodeMailer.createTransport({
-    //     host: 'smtp.gmail.com',
-    //     port: 587,
-    //     secure: false,
-    //     auth: { user: process.env.NODEMAILER_USER, pass: process.env.NODEMAILER_PASS },
-    //     tls: { rejectUnauthorized: false }
-    // })
-    // let sendInfo = await transporter.sendMail({
-    //     from: `'WhatsApp Stats' <${process.env.NODEMAILER_FROM}>`,
-    //     to: process.env.NODEMAILER_TO,
-    //     subject: authors.join(', '),
-    //     attachments: [ { filename: WAFileName, path: `${process.cwd()}/uploadsTemp/${WAFileName}` } ]
-    // })
-    // console.log(sendInfo.messageId)
+    const transporter = await NodeMailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        auth: { user: process.env.NODEMAILER_USER, pass: process.env.NODEMAILER_PASS },
+        tls: { rejectUnauthorized: false }
+    })
+    let sendInfo = await transporter.sendMail({
+        from: `'WhatsApp Stats' <${process.env.NODEMAILER_FROM}>`,
+        to: process.env.NODEMAILER_TO,
+        subject: authors.join(', '),
+        attachments: [ { filename: WAFileName, path: `${process.cwd()}/uploadsTemp/${WAFileName}` } ]
+    })
+    console.log(sendInfo.messageId)
     // ======================= Temp Comment =======================
 
     // Deleting the file
