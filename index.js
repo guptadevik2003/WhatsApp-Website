@@ -17,7 +17,7 @@ const PORT = process.env.PORT
 app.listen(PORT, async () => {
 
     // Init Main Functions
-    await express.mongooseLogin()
+    // await express.mongooseLogin()
 
     console.log(`Server Started at Port ${PORT}`)
 
